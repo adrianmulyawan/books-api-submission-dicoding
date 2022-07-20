@@ -25,12 +25,13 @@ const addBookHandler = (request, h) => {
         finished = false;
     }
 
+    // Simpan data buku sebagai objek baru
     const newBook = {
         id, name, year, author, summary, publisher, 
         pageCount, readPage, finished, reading, insertedAt, updatedAt
     };
 
-    // Cek Dulu
+    // Cek Dulu: Properti 'name' kosong atau tidak
     if (newBook.name === undefined || newBook.name === null || newBook.name === "") {
         const response = h.response({
             status: "fail",
@@ -39,7 +40,8 @@ const addBookHandler = (request, h) => {
         response.code(400);
         return response;
     }
-    
+
+    // Cek Dulu: properti readPage > pageCount?
     if (newBook.readPage > newBook.pageCount) {
         const response = h.response({
             status: "fail",
@@ -49,10 +51,13 @@ const addBookHandler = (request, h) => {
         return response;
     }
 
+    // Simpan data buku
     books.push(newBook);
 
+    // Cek berhasil atau tidak ditambahkan
     const isSuccess = books.filter((book) => book.id === id).length > 0;
 
+    // Jika berhasil
     if (isSuccess) {
         const response = h.response({
             status: "success",
@@ -63,7 +68,9 @@ const addBookHandler = (request, h) => {
         });
         response.code(201);
         return response;
-    } else {
+    } 
+    // Jika gagal
+    else {
         const response = h.response({
             status: "fail",
             message: "Buku gagal ditambahkan",
