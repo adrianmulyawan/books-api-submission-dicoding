@@ -1,4 +1,4 @@
-const { addBookHandler, getAllBooksHandler, getBookByIdHandler, editBookByIdHandler } = require('./handler');
+const { addBookHandler, getAllBooksHandler, getBookByIdHandler, editBookByIdHandler, deletBookByIdHandler } = require('./handler');
 
 const routes = [
     // Menambahkan data buku
@@ -25,6 +25,12 @@ const routes = [
         path: '/books/{bookId}',
         handler: editBookByIdHandler,
     },
+    // Hapus Data Buku
+    {
+        method: 'DELETE',
+        path: '/books/{bookId}',
+        handler: deletBookByIdHandler,
+    }
 ]
 
 module.exports = routes;
