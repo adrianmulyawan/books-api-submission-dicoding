@@ -84,6 +84,9 @@ const addBookHandler = (request, h) => {
 
 // Handler Menampilkan Seluruh Data Buku 
 const getAllBooksHandler = (request, h) => {
+
+    // Melakukan map terhadap data di array books[]
+    // Yang dicari id, name, dan publisher
     const filterBook = books.map((book) => ({
         id: book.id,
         name: book.name,
@@ -91,13 +94,46 @@ const getAllBooksHandler = (request, h) => {
     }));
 
     const response = h.response({
-        status: 'success',
+        status: "success",
         data: {
             books: filterBook,
         },
     });
     response.code(200);
     return response;
+
 };
 
-module.exports = { addBookHandler, getAllBooksHandler };
+// Handler Menampilkan Buku Secara Spesifik
+const getBookByIdHandler = (request, h) => {
+
+    // dapat id dari request.params
+    const { bookId } = request.params;
+
+    // Cek ada tidak buku dengan id tsb
+    const book = books.filter((b) => b.id === bookId)[0];
+
+    // Jika ada
+    if (book !== undefined) {
+        const response = h.response({
+            status: "success",
+            data: {
+                book,
+            },
+        });
+        response.code(200);
+        return response;
+    } 
+    // Jika tidak ada
+    else {
+        const response = h.response({
+            status: "success",
+            message: "Buku tidak ditemukan",
+        });
+        response.code(404);
+        return response;
+    }
+
+}
+
+module.exports = { addBookHandler, getAllBooksHandler, getBookByIdHandler };
