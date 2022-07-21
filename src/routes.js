@@ -1,4 +1,4 @@
-const { addBookHandler, getAllBooksHandler, getBookByIdHandler } = require('./handler');
+const { addBookHandler, getAllBooksHandler, getBookByIdHandler, editBookByIdHandler } = require('./handler');
 
 const routes = [
     // Menambahkan data buku
@@ -18,6 +18,12 @@ const routes = [
         method: 'GET',
         path: '/books/{bookId}',
         handler: getBookByIdHandler,
+    },
+    // Ubah Data Buku
+    {
+        method: 'PUT',
+        path: '/books/{bookId}',
+        handler: editBookByIdHandler,
     },
 ]
 

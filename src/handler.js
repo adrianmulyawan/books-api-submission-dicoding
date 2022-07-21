@@ -136,4 +136,76 @@ const getBookByIdHandler = (request, h) => {
 
 }
 
-module.exports = { addBookHandler, getAllBooksHandler, getBookByIdHandler };
+// Handler Untuk Edit Data Buku
+const editBookByIdHandler = (request, h) => {
+
+    // Dapatkan id dari request.params
+    const { bookId } = request.params
+
+    // Mendapatkan data buku terbaru
+    // Melalui body request
+    const { name, year, author, summary, publisher, pageCount, readPage, reading } = request.payload;
+
+    // Cek input name terisi / tidak
+    if (name === undefined || name === null || name === "") {
+        const response = h.response({
+            status: "fail",
+            message: "Gagal memperbarui buku. Mohon isi nama buku",
+        });
+        response.code(400);
+        return response;
+    }
+
+    // Cek apakah readPage > pageCount
+    if (readPage > pageCount) {
+        const response = h.response({
+            status: "fail",
+            message: "Gagal memperbarui buku. readPage tidak boleh lebih besar dari pageCount",
+        });
+        response.code(400);
+        return response;
+    }
+
+    // Update data updateAt
+    const updatedAt = new Date().toISOString();
+
+    // Dapatkan id didalam array
+    const index = books.findIndex((book) => book.id === bookId);
+
+    // Jika index != -1 (ditemukan id-nya)
+    if (index !== -1) {
+
+        // Update data 
+        books[index] = {
+            ...books[index],
+            name,
+            year,
+            author,
+            summary,
+            publisher,
+            pageCount,
+            readPage,
+            reading
+        };
+
+        // response bila berhasil update data
+        const response = h.response({
+            status: "success",
+            message: "Buku berhasil diperbarui",
+        });
+        response.code(200);
+        return response;
+    }
+    // Jika index = -1 (tidak ditemukan id-nya) 
+    else {
+        const response = h.response({
+            status: "fail",
+            message: "Gagal memperbarui buku. Id tidak ditemukan",
+        });
+        response.code(404);
+        return response;
+    }
+
+}
+
+module.exports = { addBookHandler, getAllBooksHandler, getBookByIdHandler, editBookByIdHandler };
